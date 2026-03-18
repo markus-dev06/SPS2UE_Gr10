@@ -53,7 +53,7 @@ def is_dark(sensor):
 # - If neither sees dark, drive forward.
 # - If both see dark, stop.
 
-DRIVE_SPEED = 150  # mm/s
+DRIVE_SPEED = 500  # mm/s
 TURN_SPEED = 100  # positive = turn right, negative = turn left
 
 while True:
