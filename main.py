@@ -26,7 +26,8 @@ base = DriveBase(MotorLinks, MotorRechts, 40, 140)
 
 base.straight(500)
 
-
+SensorLichtLinks = Sensor(Port.1)
+SensorLichtRechts = Sensor(Port.4)
 
 # Run the motor up to 500 degrees per second.
 # To a target angle of 90 degrees.
