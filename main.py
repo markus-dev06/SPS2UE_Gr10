@@ -84,8 +84,6 @@ while True:
 
 
 
-
-
 # Run the motor up to 500 degrees per second.
 # To a target angle of 90 degrees.
 # MotorLinks.run_target(500, 90)
@@ -101,3 +99,4 @@ while True:
 # ev3.speaker.beep()
 # ev3.speaker.beep()
 # ev3.speaker.beep()
+
