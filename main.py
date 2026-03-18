@@ -26,8 +26,50 @@ base = DriveBase(MotorLinks, MotorRechts, 40, 140)
 
 base.straight(500)
 
-SensorLichtLinks = Sensor(Port.1)
-SensorLichtRechts = Sensor(Port.4)
+# Initialize the two light sensors (use ColorSensor for reflected light values).
+# Change Port.S1 / Port.S4 to match your actual sensor ports.
+light_left = ColorSensor(Port.S4)
+light_right = ColorSensor(Port.S1)
+
+# Define a threshold for "dark" vs "bright" (0..100).
+# You can adjust this value based on your lighting conditions.
+DARK_THRESHOLD = 30
+
+def is_dark(sensor):
+    """Return True when the given sensor sees a dark surface."""
+    return sensor.reflection() < DARK_THRESHOLD
+
+# Drive based on light sensor values:
+# - If the left sensor sees dark, steer to the right.
+# - If the right sensor sees dark, steer to the left.
+# - If neither sees dark, drive forward.
+# - If both see dark, stop.
+
+DRIVE_SPEED = 150  # mm/s
+TURN_SPEED = 100  # positive = turn right, negative = turn left
+
+while True:
+    left_dark = is_dark(light_left)
+    right_dark = is_dark(light_right)
+
+    if left_dark and not right_dark:
+        # Turn right (avoid dark on the left).
+        base.drive(DRIVE_SPEED, TURN_SPEED)
+    elif right_dark and not left_dark:
+        # Turn left (avoid dark on the right).
+        base.drive(DRIVE_SPEED, -TURN_SPEED)
+    elif left_dark and right_dark:
+        # Both sensors see dark: stop and wait.
+        base.stop()
+    else:
+        # Both sensors see bright: go straight.
+        base.drive(DRIVE_SPEED, 0)
+
+    wait(100)
+
+
+
+
 
 # Run the motor up to 500 degrees per second.
 # To a target angle of 90 degrees.
