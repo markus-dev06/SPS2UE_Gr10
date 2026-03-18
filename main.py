@@ -15,6 +15,7 @@ from pybricks.media.ev3dev import SoundFile, ImageFile
 from time import sleep
 
 
+ 
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
 # Click "Open user guide" on the EV3 extension tab for more information.
 
@@ -31,9 +32,16 @@ base.straight(500)
 light_left = ColorSensor(Port.S4)
 light_right = ColorSensor(Port.S1)
 
+# Initialize a distance sensor (Ultrasonic) on the specified port.
+# Change Port.S2 to the actual port your distance sensor is connected to.
+distance_sensor = UltrasonicSensor(Port.S2)
+
 # Define a threshold for "dark" vs "bright" (0..100).
 # You can adjust this value based on your lighting conditions.
 DARK_THRESHOLD = 30
+
+# When distance > DISTANCE_STOP_MM, stop movement.
+DISTANCE_STOP_MM = 50  # 10 cm
 
 def is_dark(sensor):
     """Return True when the given sensor sees a dark surface."""
@@ -49,6 +57,13 @@ DRIVE_SPEED = 150  # mm/s
 TURN_SPEED = 100  # positive = turn right, negative = turn left
 
 while True:
+    # Stop if the distance sensor sees more than 10 cm.
+    # (As requested: stop when distance > 10 cm.)
+    if distance_sensor.distance() > DISTANCE_STOP_MM:
+        base.stop()
+        print("Distance > 10 cm: stopping")
+        break
+
     left_dark = is_dark(light_left)
     right_dark = is_dark(light_right)
 
@@ -65,7 +80,7 @@ while True:
         # Both sensors see bright: go straight.
         base.drive(DRIVE_SPEED, 0)
 
-    wait(100)
+    wait(200)
 
 
 
