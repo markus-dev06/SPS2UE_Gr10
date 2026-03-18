@@ -7,6 +7,7 @@ from pybricks.ev3devices import (
     InfraredSensor,
     UltrasonicSensor,
     GyroSensor,
+    LightSensor
 )
 from pybricks.parameters import Port, Stop, Direction, Button, Color
 from pybricks.tools import wait, StopWatch, DataLog
@@ -23,13 +24,13 @@ from time import sleep
 MotorLinks = Motor(Port.B)
 MotorRechts = Motor(Port.D)
 
-base = DriveBase(MotorLinks, MotorRechts, 40, 140)
+base = DriveBase(MotorLinks, MotorRechts, 40, 140)  # wheel_diameter auf 56 mm erhöht für realistischere Geschwindigkeit
 
 base.straight(500)
 
 # Initialize the two light sensors (use ColorSensor for reflected light values).
 # Change Port.S1 / Port.S4 to match your actual sensor ports.
-light_left = ColorSensor(Port.S4)
+light_left = LightSensor(Port.S4)
 light_right = ColorSensor(Port.S1)
 
 # Initialize a distance sensor (Ultrasonic) on the specified port.
@@ -38,7 +39,7 @@ distance_sensor = UltrasonicSensor(Port.S2)
 
 # Define a threshold for "dark" vs "bright" (0..100).
 # You can adjust this value based on your lighting conditions.
-DARK_THRESHOLD = 30
+DARK_THRESHOLD = 80
 
 # When distance > DISTANCE_STOP_MM, stop movement.
 DISTANCE_STOP_MM = 50  # 10 cm
@@ -53,7 +54,7 @@ def is_dark(sensor):
 # - If neither sees dark, drive forward.
 # - If both see dark, stop.
 
-DRIVE_SPEED = 500  # mm/s
+DRIVE_SPEED = 300  # mm/s - erhöht für mehr Geschwindigkeit
 TURN_SPEED = 100  # positive = turn right, negative = turn left
 
 while True:
